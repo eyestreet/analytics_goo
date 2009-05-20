@@ -1,3 +1,9 @@
+* Remove RailsAnalytics:AnalyticsConfig and pass in a hash.
+
+* Move to static call mechanism instead of mixing in to core classes.
+
+* change from track_it to track_page_view
+
 * Change location of initialzation of random number cookies to be redone with each call to track_it. Currently they get set once per instantiation.
 
 * Pass along additional header information to google in the image request so that items like browser can be specified.
