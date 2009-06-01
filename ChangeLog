@@ -1,0 +1,4 @@
+2009-06-01  Rob Christie  <rob.christie@eyestreet.com>
+
+	* google_analytics_adapter.rb: Changed initialization from taking an object to instead use a hash of values.
+

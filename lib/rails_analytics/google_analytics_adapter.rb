@@ -41,14 +41,21 @@ module RailsAnalytics
   class GoogleAnalyticsAdapter
     attr_accessor :utmcc_cookie, :utmcc_random, :utmcc_time, :utmhid, :config
 
-    def initialize(ac)
+    def initialize(ac = {})
       @utmcc_cookie = ActiveSupport::SecureRandom.random_number(89999999) + 10000000
       @utmcc_random = ActiveSupport::SecureRandom.random_number(1147483647) + 1000000000
       @utmcc_time = Time.new.to_i
       @utmhid = ActiveSupport::SecureRandom.random_number(999999999)
       # holds a hash of analytics accounts
       @config = {}
-      @config[ac.name]=ac
+      if ac.values.first.is_a?(Hash)
+        # we have multiple configurations
+        ac.each do |k,v|
+          @config[v[:name]]=v
+        end
+      else
+        @config[ac[:name]]=ac
+      end
     end
 
     GA_DOMAIN = "www.google-analytics.com"
@@ -62,7 +69,7 @@ module RailsAnalytics
 
     # utmac   Account String. Appears on all requests.    utmac=UA-2202604-2
     def utmac(name)
-      self.config[name].analytics_id
+      self.config[name][:analytics_id]
     end
 
     # utmhn
@@ -163,7 +170,7 @@ module RailsAnalytics
 
     #domain
     def domain(name)
-      self.config[name].domain
+      self.config[name][:domain]
     end
 
 

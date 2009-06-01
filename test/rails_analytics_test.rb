@@ -3,9 +3,19 @@ require 'rails_analytics'
 
 class RailsAnalyticsTest < ActiveSupport::TestCase
 
-  context "RailsAnalytics contains a GoogleAnalyticsAdapter which" do
+  context "RailsAnalytics contains a GoogleAnalyticsAdapter which when passed initialization data" do
     setup do
-      @analytics_config = RailsAnalytics::AnalyticsConfig.new("test","UA-2202604-2","test.local",:google_analytics)
+      @analytics_config = { :name => "test",:analytics_id => "UA-2202604-2",:domain => "test.local", :type => :google_analytics }
+    end
+    should "be a valid class" do
+      assert RailsAnalytics::GoogleAnalyticsAdapter.new(@analytics_config)
+    end
+  end
+  context "RailsAnalytics can be initialized with two analytics accounts" do
+    setup do
+      @analytics_config = {"test" => { :name => "test",:analytics_id => "UA-2202604-2",:domain => "test.local", :type => :google_analytics },
+                           "test2" => { :name => "test2",:analytics_id => "UA-2202604-3",:domain => "test.local", :type => :google_analytics }
+                          }
     end
     should "be a valid class" do
       assert RailsAnalytics::GoogleAnalyticsAdapter.new(@analytics_config)
@@ -13,7 +23,7 @@ class RailsAnalyticsTest < ActiveSupport::TestCase
   end
   context "Rails Analytics " do
     setup do
-      @analytics_config = RailsAnalytics::AnalyticsConfig.new("test","UA-2202604-2","test.local",:google_analytics)
+      @analytics_config = { :name => "test",:analytics_id => "UA-2202604-2",:domain => "test.local", :type => :google_analytics }
       @ga = RailsAnalytics::GoogleAnalyticsAdapter.new(@analytics_config)
     end
     context "when initialized with an analytics id" do
@@ -85,8 +95,7 @@ class RailsAnalyticsTest < ActiveSupport::TestCase
   end
   context "Rails Analyics" do
     setup do
-      analytics_config = RailsAnalytics::AnalyticsConfig.new(:test,"UA-3536616-5","demo.mobilediscovery.com",:google_analytics)
-      @ga2 = RailsAnalytics::GoogleAnalyticsAdapter.new(analytics_config)
+      @ga2 = RailsAnalytics::GoogleAnalyticsAdapter.new(:name => :test, :analytics_id => "UA-3536616-5",:domain => "demo.mobilediscovery.com",:type => :google_analytics)
       @ga2.expects(:utmcc_cookie).times(2).returns(10000001)
       @ga2.expects(:utmcc_random).returns(1147483647)
       @now = Time.now.to_i
@@ -99,8 +108,7 @@ class RailsAnalyticsTest < ActiveSupport::TestCase
   # TODO: mock this test. Currently it actually does do a request. Was using this to verify that it actually was working.
   context "An analytics tracking event" do
     setup do
-      analytics_config = RailsAnalytics::AnalyticsConfig.new(:test,"UA-3536616-5","demo.mobilediscovery.com",:google_analytics)
-      @ga3 = RailsAnalytics::GoogleAnalyticsAdapter.new(analytics_config)
+      @ga3 = RailsAnalytics::GoogleAnalyticsAdapter.new(:name => :test, :analytics_id => "UA-3536616-5",:domain => "demo.mobilediscovery.com",:type => :google_analytics)
     end
     context "makes a request for an image on the google analytics server" do
       setup do

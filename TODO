@@ -1,5 +1,3 @@
-* Remove RailsAnalytics:AnalyticsConfig and pass in a hash.
-
 * Move to static call mechanism instead of mixing in to core classes.
 
 * change from track_it to track_page_view

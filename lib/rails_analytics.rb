@@ -8,12 +8,9 @@ module RailsAnalytics
   class AnalyticsAdapterNotFound < StandardError
   end
 
-  class AnalyticsConfig < Struct.new(:name,:analytics_id, :domain, :type)
-  end
-
   def self.config(analytics)
     begin
-      s = analytics.type.to_s + "_adapter"
+      s = analytics[:type].to_s + "_adapter"
       adapter = "RailsAnalytics::" + s.camelize
       tracker = adapter.constantize.new(analytics)
       silence_warnings { Object.const_set "ANALYTICS_TRACKER", tracker }
