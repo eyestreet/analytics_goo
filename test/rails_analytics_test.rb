@@ -87,11 +87,6 @@ class RailsAnalyticsTest < ActiveSupport::TestCase
         assert_equal "1", @ga.utmcr
       end
     end
-    context "has various cookie values that need to be passed encoded and passed along" do
-      should "have a utmcc cookie within a certain range " do
-        assert @ga.utmcc_cookie >= 10000000 && @ga.utmcc_cookie <= 99999999
-      end
-    end
   end
   context "Rails Analyics" do
     setup do

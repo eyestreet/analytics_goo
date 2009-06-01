@@ -39,13 +39,9 @@
 
 module RailsAnalytics
   class GoogleAnalyticsAdapter
-    attr_accessor :utmcc_cookie, :utmcc_random, :utmcc_time, :utmhid, :config
+    attr_accessor :config
 
     def initialize(ac = {})
-      @utmcc_cookie = ActiveSupport::SecureRandom.random_number(89999999) + 10000000
-      @utmcc_random = ActiveSupport::SecureRandom.random_number(1147483647) + 1000000000
-      @utmcc_time = Time.new.to_i
-      @utmhid = ActiveSupport::SecureRandom.random_number(999999999)
       # holds a hash of analytics accounts
       @config = {}
       if ac.values.first.is_a?(Hash)
@@ -165,7 +161,7 @@ module RailsAnalytics
     #   Cookie values. This request parameter sends all the cookies requested from the page.
     #   utmcc=__utma%3D117243.1695285.22%3B%2B __utmz%3D117945243.1202416366.21.10. utmcsr%3Db%7C utmccn%3D(referral)%7C utmcmd%3Dreferral%7C utmcct%3D%252Fissue%3B%2B
     def utmcc
-      "__utma%3D#{self.utmcc_cookie}.#{self.utmcc_random}.#{self.utmcc_time}.#{self.utmcc_time}.#{self.utmcc_time}.10%3B%2B__utmz%3D#{self.utmcc_cookie}.#{self.utmcc_time}.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B"
+      "__utma%3D#{utmcc_cookie}.#{utmcc_random}.#{utmcc_time}.#{utmcc_time}.#{utmcc_time}.10%3B%2B__utmz%3D#{utmcc_cookie}.#{utmcc_time}.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B"
     end
 
     #domain
@@ -189,7 +185,23 @@ module RailsAnalytics
 
     protected
     def track_it(path, name)
-      Net::HTTP.get_response(GA_DOMAIN,"/__utm.gif?utmwv=#{self.utmwv}&utmn=#{self.utmn}&utmhn=#{self.domain(name)}&utmcs=#{self.utmcs}&utmsr=#{self.utmsr}&utmsc=#{self.utmsc}&utmul=#{self.utmul}&utmje=#{self.utmje}&utmfl=#{URI::escape(self.utmfl)}&utmdt=#{URI::escape(self.utmdt)}&utmhid=#{self.utmhid}&utmr=#{self.utmr}&utmp=#{path}&utmac=#{self.utmac(name)}&utmcc=#{self.utmcc}")
+      Net::HTTP.get_response(GA_DOMAIN,"/__utm.gif?utmwv=#{self.utmwv}&utmn=#{self.utmn}&utmhn=#{self.domain(name)}&utmcs=#{self.utmcs}&utmsr=#{self.utmsr}&utmsc=#{self.utmsc}&utmul=#{self.utmul}&utmje=#{self.utmje}&utmfl=#{URI::escape(self.utmfl)}&utmdt=#{URI::escape(self.utmdt)}&utmhid=#{utmhid}&utmr=#{self.utmr}&utmp=#{path}&utmac=#{self.utmac(name)}&utmcc=#{self.utmcc}")
+    end
+
+    def utmcc_cookie
+      ActiveSupport::SecureRandom.random_number(89999999) + 10000000
+    end
+
+    def utmcc_random
+      ActiveSupport::SecureRandom.random_number(1147483647) + 1000000000
+    end
+
+    def utmcc_time
+      Time.new.to_i
+    end
+
+    def utmhid
+      ActiveSupport::SecureRandom.random_number(999999999)
     end
   end
 end
