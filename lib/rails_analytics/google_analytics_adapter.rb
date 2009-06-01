@@ -175,7 +175,7 @@ module RailsAnalytics
 
 
     # send a request to get the image from google
-    def track(path, name=nil)
+    def track_page_view(path, name=nil)
       res = []
       if name.nil?
         @config.each do |name,value|

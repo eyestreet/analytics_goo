@@ -21,9 +21,9 @@ module RailsAnalytics
 
   module InstanceMethods
     # any methods here will apply to instances
-    def track_it(path, name=nil)
+    def track_page_view(path, name=nil)
       if defined?(ANALYTICS_TRACKER)
-        ANALYTICS_TRACKER.track(path,name)
+        ANALYTICS_TRACKER.track_page_view(path,name)
       else
         nil
       end

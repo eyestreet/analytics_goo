@@ -112,7 +112,7 @@ class RailsAnalyticsTest < ActiveSupport::TestCase
     end
     context "makes a request for an image on the google analytics server" do
       setup do
-        @resp = @ga3.track("/testFoo/myPage.html")
+        @resp = @ga3.track_page_view("/testFoo/myPage.html")
       end
       should "be a valid response" do
         assert @resp[0].is_a?(Net::HTTPOK)
