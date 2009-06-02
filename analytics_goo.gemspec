@@ -2,20 +2,21 @@
 
 Gem::Specification.new do |s|
   s.name = %q{analytics_goo}
-  s.version = "0.0.0"
+  s.version = "0.1.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Rob Christie"]
   s.date = %q{2009-06-02}
   s.email = %q{robchristie@gmail.com}
   s.extra_rdoc_files = [
-    "README.textile"
+    "README.markdown"
   ]
   s.files = [
-    "CHANGELOG",
+    ".gitignore",
+     "CHANGELOG",
      "ChangeLog",
      "MIT-LICENSE",
-     "README.textile",
+     "README.markdown",
      "Rakefile",
      "TODO",
      "VERSION",
@@ -26,6 +27,7 @@ Gem::Specification.new do |s|
      "autotest/discover.rb",
      "autotest/railsplugin.rb",
      "autotest/railsplugin_rspec.rb",
+     "init.rb",
      "lib/analytics_goo.rb",
      "lib/analytics_goo/google_analytics_adapter.rb",
      "rails/init.rb",

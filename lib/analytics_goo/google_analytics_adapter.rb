@@ -39,9 +39,9 @@
 
 module AnalyticsGoo
   class GoogleAnalyticsAdapter
-    attr_accessor :config
+    attr_accessor :config, :env
 
-    def initialize(ac = {})
+    def initialize(ac = {}, environment = nil)
       # holds a hash of analytics accounts
       @config = {}
       if ac.values.first.is_a?(Hash)
@@ -52,6 +52,8 @@ module AnalyticsGoo
       else
         @config[ac[:name]]=ac
       end
+      # sets the environment that this should be run in
+      @env = environment
     end
 
     GA_DOMAIN = "www.google-analytics.com"

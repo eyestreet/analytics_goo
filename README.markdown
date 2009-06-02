@@ -32,16 +32,17 @@ In an intializer like config/initializers/analytics_goo.rb or in your appropriat
 
         AnalyticsGoo.config(:google_analytics, 
                             { :name => :test, :analytics_id => "UA-3536616-5", :domain => "demo.eyestreet.com" }, 
-                            true)
+                            true, "production")
 
 * analytics type - Currently we only support :google_analytics
-* analytics configuration - name, account id, and domain
+* analytics configuration - Name, account id, and domain
 * rails_core_mixins - Defaults to false. If set to true then you get an accessor method on rails core classes for analytics_goo
+* environment - The environment you this to work in.
 
 Then in your models, controllers, and mailers you can do the following:
 
     user = User.find(:first)
-    user.analytics_goo.track_page_view("/found_my_first_user")
+    user.track_page_view("/found_my_first_user")
 
 ## Testing
 

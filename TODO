@@ -1,5 +1,3 @@
-* Move to static call mechanism instead of mixing in to core classes.
-
 * Pass along additional header information to google in the image request so that items like browser can be specified.
 
 * Allow an asynchronous operation mode so that tracking has the option of not being done synchronously.
