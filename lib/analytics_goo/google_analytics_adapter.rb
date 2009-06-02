@@ -39,9 +39,9 @@
 
 module AnalyticsGoo
   class GoogleAnalyticsAdapter
-    attr_accessor :config, :env
+    attr_accessor :config, :env, :noop
 
-    def initialize(ac = {}, environment = nil)
+    def initialize(ac = {}, environment = nil, noop = false)
       # holds a hash of analytics accounts
       @config = {}
       if ac.values.first.is_a?(Hash)
@@ -54,6 +54,7 @@ module AnalyticsGoo
       end
       # sets the environment that this should be run in
       @env = environment
+      @noop = noop
     end
 
     GA_DOMAIN = "www.google-analytics.com"
@@ -175,12 +176,14 @@ module AnalyticsGoo
     # send a request to get the image from google
     def track_page_view(path, name=nil)
       res = []
-      if name.nil?
-        @config.each do |name,value|
+      unless @noop == true
+        if name.nil?
+          @config.each do |name,value|
+            res << track_it(path, name)
+          end
+        else
           res << track_it(path, name)
         end
-      else
-        res << track_it(path, name)
       end
       res
     end

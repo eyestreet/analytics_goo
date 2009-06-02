@@ -41,7 +41,7 @@ In an intializer like config/initializers/analytics_goo.rb or in your appropriat
 Then in your models, controllers, and mailers you can do the following:
 
     user = User.find(:first)
-    user.track_page_view("/found_my_first_user")
+    user.analytics_goo.track_page_view("/found_my_first_user")
 
 ## Testing
 

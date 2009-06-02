@@ -22,12 +22,14 @@ module AnalyticsGoo
     begin
       s = type.to_s + "_adapter"
       adapter = "AnalyticsGoo::" + s.camelize
-      tracker = adapter.constantize.new(analytics, env)
       if rails_core_mixins
+        tracker = adapter.constantize.new(analytics, env, (RAILS_ENV != env))
         for framework in ([ :active_record, :action_controller, :action_mailer ])
           framework.to_s.camelize.constantize.const_get("Base").send :include, AnalyticsGoo::InstanceMethods
         end
         silence_warnings { Object.const_set "ANALYTICS_TRACKER", tracker }
+      else
+        tracker = adapter.constantize.new(analytics, env)
       end
       tracker
     rescue StandardError
@@ -37,11 +39,9 @@ module AnalyticsGoo
 
   module InstanceMethods
     # any methods here will apply to instances
-    def track_page_view(path, name=nil)
+    def analytics_goo
       if defined?(ANALYTICS_TRACKER)
-        unless ANALYTICS_TRACKER.env != nil && ANALYTICS_TRACKER.env != RAILS_ENV
-          ANALYTICS_TRACKER.track_page_view(path,name)
-        end
+          ANALYTICS_TRACKER
       else
         nil
       end
