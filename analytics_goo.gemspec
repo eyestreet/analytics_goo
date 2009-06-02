@@ -19,6 +19,7 @@ Gem::Specification.new do |s|
      "Rakefile",
      "TODO",
      "VERSION",
+     "analytics_goo.gemspec",
      "autotest/CHANGELOG",
      "autotest/LICENSE",
      "autotest/README.rdoc",
@@ -27,6 +28,9 @@ Gem::Specification.new do |s|
      "autotest/railsplugin_rspec.rb",
      "lib/analytics_goo.rb",
      "lib/analytics_goo/google_analytics_adapter.rb",
+     "rails/init.rb",
+     "rails/init.rb",
+     "tasks/analytics_goo.rake",
      "test/analytics_goo_test.rb",
      "test/test_helper.rb"
   ]

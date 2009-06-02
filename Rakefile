@@ -9,6 +9,7 @@ begin
     gem.summary = %Q{TODO}
     gem.email = "robchristie@gmail.com"
     gem.homepage = "http://github.com/eyestreet/analytics_goo"
+    gem.files.include "rails/**/*"
     gem.authors = ["Rob Christie"]
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
