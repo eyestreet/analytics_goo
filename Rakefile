@@ -2,10 +2,25 @@ require 'rake'
 require 'rake/testtask'
 require 'rake/rdoctask'
 
+begin
+  require 'jeweler'
+  Jeweler::Tasks.new do |gem|
+    gem.name = "analytics_goo"
+    gem.summary = %Q{TODO}
+    gem.email = "robchristie@gmail.com"
+    gem.homepage = "http://github.com/eyestreet/analytics_goo"
+    gem.authors = ["Rob Christie"]
+    # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
+  end
+
+rescue LoadError
+  puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
+end
+
 desc 'Default: run unit tests.'
 task :default => :test
 
-desc 'Test the rails_analytics plugin.'
+desc 'Test the analytics_goo plugin.'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'lib'
   t.libs << 'test'
