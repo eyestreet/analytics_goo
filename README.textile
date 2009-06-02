@@ -1,13 +1,20 @@
-h1. RailsAnalytics
+h1. AnalyticsGoo
 
-RailsAnalytics is a plugin that provides server side non-javascript tracking using google analytics. 
+AnalyticsGoo is a plugin that provides server side non-javascript tracking using google analytics. 
 
 
 h2. Example
 
 In your environment.rb add something like the following:
 
-   @RailsAnalytics.config(:name => :test,:analytics_id => "UA-3536616-5", :domain => "demo.eyestreet.com",:type => :google_analytics))@
+<pre>
+  <code>
+   AnalyticsGoo.config(:name => :test,
+                       :analytics_id => "UA-3536616-5", 
+                       :domain => "demo.eyestreet.com",
+                       :type => :google_analytics)
+  </code>
+</pre> 
 
 * name - A name for your analytics tracking (TODO: allow support for multiple accounts)
 * analytics id - Your google account
@@ -33,7 +40,7 @@ or
 
 h2. Credits
 
-RailsAnalytics is maintained by "Rob Christie":mailto:rob.christie@eyestreet.com and is funded by "EyeStreet Software":http://www.eyestreet.com.
+AnalyticsGoo is maintained by "Rob Christie":mailto:rob.christie@eyestreet.com and is funded by "EyeStreet Software":http://www.eyestreet.com.
 
 
 Copyright (c) 2009 rwc9u, Eyestreet Software released under the MIT license

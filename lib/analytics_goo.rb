@@ -1,9 +1,9 @@
 require 'uri'
 require 'cgi'
 require 'net/http'
-require 'rails_analytics/google_analytics_adapter'
+require 'analytics_goo/google_analytics_adapter'
 
-module RailsAnalytics
+module AnalyticsGoo
   # generic adapter not found exception
   class AnalyticsAdapterNotFound < StandardError
   end
@@ -11,7 +11,7 @@ module RailsAnalytics
   def self.config(analytics)
     begin
       s = analytics[:type].to_s + "_adapter"
-      adapter = "RailsAnalytics::" + s.camelize
+      adapter = "AnalyticsGoo::" + s.camelize
       tracker = adapter.constantize.new(analytics)
       silence_warnings { Object.const_set "ANALYTICS_TRACKER", tracker }
     rescue StandardError

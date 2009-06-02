@@ -1,4 +1,4 @@
-# RailsAnalytics
+# AnalyticsGoo
 # The following came from :
 #  http://code.google.com/apis/analytics/docs/tracking/gaTrackingTroubleshooting.html
 
@@ -37,7 +37,7 @@
 # utmttx
 #   Tax. Values as for unit and price.  utmttx=29.16
 
-module RailsAnalytics
+module AnalyticsGoo
   class GoogleAnalyticsAdapter
     attr_accessor :config
 
