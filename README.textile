@@ -7,7 +7,7 @@ h2. Example
 
 In your environment.rb add something like the following:
 
-   @RailsAnalytics.config(RailsAnalytics::AnalyticsConfig.new(:test,"UA-3536616-5","demo.eyestreet.com",:google_analytics))@
+   @RailsAnalytics.config(:name => :test,:analytics_id => "UA-3536616-5", :domain => "demo.eyestreet.com",:type => :google_analytics))@
 
 * name - A name for your analytics tracking (TODO: allow support for multiple accounts)
 * analytics id - Your google account
@@ -19,7 +19,7 @@ Then in your models, controllers, and mailers you can do the following:
 <pre>
   <code>
      user = User.find(:first)
-     user.track_it("/found_my_first_user")
+     user.track_page_view("/found_my_first_user")
   </code>
 </pre> 
 
