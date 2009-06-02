@@ -1,6 +1,7 @@
 require 'uri'
 require 'cgi'
 require 'net/http'
+require 'activesupport'
 require 'analytics_goo/google_analytics_adapter'
 
 module AnalyticsGoo
