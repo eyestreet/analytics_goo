@@ -1,0 +1,44 @@
+[3b07757 | Tue Jun 02 19:39:50 UTC 2009] Rob Christie <robchristie@gmail.com>
+
+ * More changes to support rails environments.
+
+[3452913 | Tue Jun 02 18:39:51 UTC 2009] Rob Christie <robchristie@gmail.com>
+
+ * Changed configuration to optionally allow mixins to Rails core classes. Changed to the use of markdown for my readme.
+
+[e75017f | Tue Jun 02 07:18:37 UTC 2009] Rob Christie <robchristie@gmail.com>
+
+ * Migrating to a gem installation.
+
+[5b7698f | Tue Jun 02 06:00:49 UTC 2009] Rob Christie <robchristie@gmail.com>
+
+ * Updated name of project.
+
+[00a001f | Tue Jun 02 05:16:40 UTC 2009] Rob Christie <robchristie@gmail.com>
+
+ * Updated based on naming and configuration changes.
+
+[17529a1 | Mon Jun 01 20:10:51 UTC 2009] Rob Christie <robchristie@gmail.com>
+
+ * Updated class so that random values are changed on each call to track_page_view.
+
+[e0d96e7 | Mon Jun 01 19:14:54 UTC 2009] Rob Christie <robchristie@gmail.com>
+
+ * Updated changelog.
+
+[b6ec97c | Mon Jun 01 19:12:50 UTC 2009] Rob Christie <robchristie@gmail.com>
+
+ * Renamed #track_it to #track_page_view, so you can eventually add other Analytics supported methods like #track_event.
+
+[99e5798 | Mon Jun 01 18:55:32 UTC 2009] Rob Christie <robchristie@gmail.com>
+
+ * Updated CHANGELOG after running script to pull and format messages from git.
+
+[bbc664d | Mon Jun 01 18:48:16 UTC 2009] Rob Christie <robchristie@gmail.com>
+
+ * Remove the AnalyticsConfig object and we now pass in a hash of initialization values. Also added support for passing in multiple hashes of initialization values.
+
+[81ce0f8 | Wed May 20 14:29:06 UTC 2009] Rob Christie <robchristie@gmail.com>
+
+ * initial commit
+
