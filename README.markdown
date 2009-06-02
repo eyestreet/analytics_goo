@@ -23,11 +23,10 @@ Google Analytics. The subsequent hash provide a name for the account, the analyt
 
 In your environment.rb add the following:
 
-  # gem configuration 
   config.gem "analytics_goo", :lib => "analytics_goo"
   
 
-You can use the gem in the same was above, or you can mix in some additional rails specific functionality that is shown below.
+You can call things  in the same way as above, or you can mix in some additional rails specific functionality that is shown below.
 In an intializer like config/initializers/analytics_goo.rb or in your appropriate environment.rb file
 
         AnalyticsGoo.config(:google_analytics, 
@@ -37,7 +36,7 @@ In an intializer like config/initializers/analytics_goo.rb or in your appropriat
 * analytics type - Currently we only support :google_analytics
 * analytics configuration - Name, account id, and domain
 * rails_core_mixins - Defaults to false. If set to true then you get an accessor method on rails core classes for analytics_goo
-* environment - The environment you this to work in.
+* environment - The RAILS_ENV environment that the analytics code should be called in. In all other environments it is a noop.
 
 Then in your models, controllers, and mailers you can do the following:
 
