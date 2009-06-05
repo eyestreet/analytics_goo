@@ -25,6 +25,8 @@ class AnalyticsGooTest < ActiveSupport::TestCase
     setup do
       @analytics_config = { :name => "test",:analytics_id => "UA-2202604-2",:domain => "test.local", :type => :google_analytics }
       @ga = AnalyticsGoo::GoogleAnalyticsAdapter.new(@analytics_config)
+      @ga.utmdt = "This is the page title"
+      @ga.utmfl = "9.0 r124"
     end
     context "when initialized with an analytics id" do
       should "return that id" do
@@ -69,10 +71,10 @@ class AnalyticsGooTest < ActiveSupport::TestCase
         assert @ga.utmn != @ga.utmn
       end
       should "have a utmsr equal to the screen resolution" do
-        assert_equal "2400x1920", @ga.utmsr
+        assert_equal "0x0", @ga.utmsr
       end
       should "have a utmsc equal to the screen color depth" do
-        assert_equal "24-bit", @ga.utmsc
+        assert_equal "0-bit", @ga.utmsc
       end
       should "have a utmul equal to the browser language" do
         assert_equal "en-us", @ga.utmul

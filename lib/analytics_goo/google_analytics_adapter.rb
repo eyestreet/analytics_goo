@@ -39,9 +39,20 @@
 
 module AnalyticsGoo
   class GoogleAnalyticsAdapter
-    attr_accessor :config, :env, :noop
+    attr_accessor :config, :env, :noop, :utmdt, :utmfl
+    # utmdt
+    #   Page title, which is a URL-encoded string.  utmdt=analytics%20page%20test
+    # utmfl
+    #   Flash version
+        # utmhn
+    # currently not stored as an accessor
+    #   Host Name, which is a URL-encoded string.   utmhn=x343.gmodules.com
+    #  def utmhn
+    #       self.domain
+    #     end
 
-    def initialize(ac = {}, environment = nil, noop = false)
+
+    def initialize(ac = {}, environment = nil, noop = false, utmdt = "")
       # holds a hash of analytics accounts
       @config = {}
       if ac.values.first.is_a?(Hash)
@@ -55,6 +66,8 @@ module AnalyticsGoo
       # sets the environment that this should be run in
       @env = environment
       @noop = noop
+      @utmdt = utmdt
+      @utmfl = ""
     end
 
     GA_DOMAIN = "www.google-analytics.com"
@@ -71,29 +84,11 @@ module AnalyticsGoo
       self.config[name][:analytics_id]
     end
 
-    # utmhn
-    #   Host Name, which is a URL-encoded string.   utmhn=x343.gmodules.com
-    #  def utmhn
-    #       self.domain
-    #     end
-
-    # utmfl
-    #   Flash Version   utmfl=9.0%20r48&
-    def utmfl
-      "9.0 r124"
-    end
-
     # utmcs
     #   Language encoding for the browser. Some browsers don't set this, in which case it is set to "-"
     #   utmcs=ISO-8859-1
     def utmcs
       "UTF-8"
-    end
-
-    # utmdt
-    #   Page title, which is a URL-encoded string.  utmdt=analytics%20page%20test
-    def utmdt
-      "This is the page title"
     end
 
     # utmje
@@ -111,13 +106,13 @@ module AnalyticsGoo
     # utmsc
     #   Screen color depth  utmsc=24-bit
     def utmsc
-      "24-bit"
+      "0-bit"
     end
 
     # utmsr
     #   Screen resolution   utmsr=2400x1920&
     def utmsr
-      "2400x1920"
+      "0x0"
     end
 
     # utmul
@@ -190,6 +185,7 @@ module AnalyticsGoo
 
     protected
     def track_it(path, name)
+#       puts "/__utm.gif?utmwv=#{self.utmwv}&utmn=#{self.utmn}&utmhn=#{self.domain(name)}&utmcs=#{self.utmcs}&utmsr=#{self.utmsr}&utmsc=#{self.utmsc}&utmul=#{self.utmul}&utmje=#{self.utmje}&utmfl=#{URI::escape(self.utmfl)}&utmdt=#{URI::escape(self.utmdt)}&utmhid=#{utmhid}&utmr=#{self.utmr}&utmp=#{path}&utmac=#{self.utmac(name)}&utmcc=#{self.utmcc} \n"
       Net::HTTP.get_response(GA_DOMAIN,"/__utm.gif?utmwv=#{self.utmwv}&utmn=#{self.utmn}&utmhn=#{self.domain(name)}&utmcs=#{self.utmcs}&utmsr=#{self.utmsr}&utmsc=#{self.utmsc}&utmul=#{self.utmul}&utmje=#{self.utmje}&utmfl=#{URI::escape(self.utmfl)}&utmdt=#{URI::escape(self.utmdt)}&utmhid=#{utmhid}&utmr=#{self.utmr}&utmp=#{path}&utmac=#{self.utmac(name)}&utmcc=#{self.utmcc}")
     end
 
