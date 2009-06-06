@@ -1,7 +1,9 @@
-* Pass along additional header information to google in the image request so that items like browser can be specified.
+* Add javascript-less support for google analytics event tracking.
 
 * Allow an asynchronous operation mode so that tracking has the option of not being done synchronously.
 
-* Peak at the cookies that came in on the most recent request and then use those to build our utmcc.
-
 * Clean up tests.
+
+* Pass along additional header information to google in the image request so that items like browser can be specified.
+
+* Peak at the cookies that came in on the most recent request and then use those to build our utmcc.
