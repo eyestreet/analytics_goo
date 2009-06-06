@@ -3,39 +3,50 @@ require 'analytics_goo'
 
 class AnalyticsGooTest < ActiveSupport::TestCase
 
-  context "AnalyticsGoo contains a GoogleAnalyticsAdapter which when passed initialization data" do
+  context "AnalyticsGoo " do
     setup do
-      @analytics_config = { :name => "test",:analytics_id => "UA-2202604-2",:domain => "test.local", :type => :google_analytics }
+      @analytics_config = { :analytics_id => "UA-2202604-2",:domain => "test.local" }
     end
-    should "be a valid class" do
-      assert AnalyticsGoo::GoogleAnalyticsAdapter.new(@analytics_config)
+    context "contains a GoogleAnalyticsAdapter which when passed initialization data" do
+      should "be a valid class" do
+        assert AnalyticsGoo::GoogleAnalyticsAdapter.new(@analytics_config)
+      end
+    end
+    context "contains a GoogleAnalyticsAdapter when instantiated with the config method" do
+      should "be a valid class" do
+        assert AnalyticsGoo.config(:google_analytics, @analytics_config)
+      end
+    end
+    should "raise an exception when instantiated with an invalid adapter" do
+      assert_raise AnalyticsGoo::AnalyticsAdapterNotFound do
+        AnalyticsGoo.config(:moogle_analytics, @analytics_config)
+      end
+    end
+    context "can pass along an environment variable that" do
+      setup do
+        @analytics_config[:environment] = "test"
+      end
+     should "be passed along to the instantiated class" do
+        assert_equal "test", AnalyticsGoo.config(:google_analytics, @analytics_config).env
+      end
     end
   end
-  context "AnalyticsGoo can be initialized with two analytics accounts" do
+
+  context "AnalyticsGoo " do
     setup do
-      @analytics_config = {"test" => { :name => "test",:analytics_id => "UA-2202604-2",:domain => "test.local", :type => :google_analytics },
-                           "test2" => { :name => "test2",:analytics_id => "UA-2202604-3",:domain => "test.local", :type => :google_analytics }
-                          }
-    end
-    should "be a valid class" do
-      assert AnalyticsGoo::GoogleAnalyticsAdapter.new(@analytics_config)
-    end
-  end
-  context "Rails Analytics " do
-    setup do
-      @analytics_config = { :name => "test",:analytics_id => "UA-2202604-2",:domain => "test.local", :type => :google_analytics }
+      @analytics_config = { :analytics_id => "UA-2202604-2",:domain => "test.local"}
       @ga = AnalyticsGoo::GoogleAnalyticsAdapter.new(@analytics_config)
       @ga.utmdt = "This is the page title"
       @ga.utmfl = "9.0 r124"
     end
     context "when initialized with an analytics id" do
       should "return that id" do
-        assert_equal "UA-2202604-2", @ga.utmac("test")
+        assert_equal "UA-2202604-2", @ga.utmac
       end
     end
     context "when initialized with a domain" do
       should "return that domain" do
-        assert_equal "test.local", @ga.domain("test")
+        assert_equal "test.local", @ga.domain
       end
     end
     context "that has been initialized" do
@@ -50,10 +61,10 @@ class AnalyticsGooTest < ActiveSupport::TestCase
     end
     context "creates an image URL that " do
       should "have a utmac equal to the specified analytics id" do
-        assert_equal "UA-2202604-2", @ga.utmac("test")
+        assert_equal "UA-2202604-2", @ga.utmac
       end
       should "have a utmhn equal to the host name" do
-        assert_equal "test.local", @ga.domain("test")
+        assert_equal "test.local", @ga.domain
       end
       should "have a utmfl equal to the flash version installed" do
         assert_equal "9.0 r124", @ga.utmfl
@@ -92,7 +103,7 @@ class AnalyticsGooTest < ActiveSupport::TestCase
   end
   context "Rails Analyics" do
     setup do
-      @ga2 = AnalyticsGoo::GoogleAnalyticsAdapter.new(:name => :test, :analytics_id => "UA-3536616-5",:domain => "demo.mobilediscovery.com",:type => :google_analytics)
+      @ga2 = AnalyticsGoo::GoogleAnalyticsAdapter.new(:analytics_id => "UA-3536616-5",:domain => "demo.mobilediscovery.com")
       @ga2.expects(:utmcc_cookie).times(2).returns(10000001)
       @ga2.expects(:utmcc_random).returns(1147483647)
       @now = Time.now.to_i
@@ -105,14 +116,14 @@ class AnalyticsGooTest < ActiveSupport::TestCase
   # TODO: mock this test. Currently it actually does do a request. Was using this to verify that it actually was working.
   context "An analytics tracking event" do
     setup do
-      @ga3 = AnalyticsGoo::GoogleAnalyticsAdapter.new(:name => :test, :analytics_id => "UA-3536616-5",:domain => "demo.mobilediscovery.com",:type => :google_analytics)
+      @ga3 = AnalyticsGoo::GoogleAnalyticsAdapter.new(:analytics_id => "UA-3536616-5",:domain => "demo.mobilediscovery.com")
     end
     context "makes a request for an image on the google analytics server" do
       setup do
         @resp = @ga3.track_page_view("/testFoo/myPage.html")
       end
       should "be a valid response" do
-        assert @resp[0].is_a?(Net::HTTPOK)
+        assert @resp.is_a?(Net::HTTPOK)
       end
     end
   end

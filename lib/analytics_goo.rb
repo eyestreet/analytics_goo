@@ -13,23 +13,25 @@ module AnalyticsGoo
   # Factory for returning the appropriate analytics object. The <tt>type</tt> is
   # a symbol that defines the type of analytics tracker you want to create. Currently,
   # the only acceptable value is :google_analytics. The <tt>analytics</tt> hash holds
-  # the name, analytics_id, and domain of the adapter that you are configuring. You can also
-  # pass in a hash of hashes with multiple accounts. Setting <tt>rails_core_mixins</tt> to
+  # the required keys of analytics_id and the domain of the adapter that you are configuring.
+  # Setting the key <tt>rails_core_mixins</tt> to
   # true will mixin an accessor for this object into the core rails framework classes (active_record, action_controller and action_mailer). The default
-  # for this is false so that there are no rails dependencies on the gem. The <tt>env</tt> by default is set to "production". The
+  # for this is false so that there are no rails dependencies on the gem. The key <tt>environment</tt> by default is set to "production". The
   # rails mixin functionality checks this value against its RAILS_ENV then it calls out to the analytics only if the value is nil or matches.
-  def self.config(type, analytics = {}, rails_core_mixins = false, env = "production")
+  def self.config(type, analytics = {})
     begin
       s = type.to_s + "_adapter"
       adapter = "AnalyticsGoo::" + s.camelize
-      if rails_core_mixins
-        tracker = adapter.constantize.new(analytics, env, (RAILS_ENV != env))
+      analytics[:environment] = "production" if analytics[:environment].nil?
+      if analytics[:rails_core_mixins] == true
+        analytics[:noop] = (RAILS_ENV != analytics[:environment])
+        tracker = adapter.constantize.new(analytics)
         for framework in ([ :active_record, :action_controller, :action_mailer ])
           framework.to_s.camelize.constantize.const_get("Base").send :include, AnalyticsGoo::InstanceMethods
         end
         silence_warnings { Object.const_set "ANALYTICS_TRACKER", tracker }
       else
-        tracker = adapter.constantize.new(analytics, env)
+        tracker = adapter.constantize.new(analytics)
       end
       tracker
     rescue StandardError

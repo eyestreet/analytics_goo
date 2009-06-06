@@ -10,7 +10,6 @@ gem install eyestreet-analytics_goo
    The simple usage is the following:
    
         tracker = AnalyticsGoo.config(:google_analytics, 
-                                      :name => :test,
                                       :analytics_id => "UA-3536616-5", 
                                       :domain => "demo.eyestreet.com")
 
@@ -29,14 +28,19 @@ In your environment.rb add the following:
 You can call things  in the same way as above, or you can mix in some additional rails specific functionality that is shown below.
 In an intializer like config/initializers/analytics_goo.rb or in your appropriate environment.rb file
 
-        AnalyticsGoo.config(:google_analytics, 
-                            { :name => :test, :analytics_id => "UA-3536616-5", :domain => "demo.eyestreet.com" }, 
-                            true, "production")
+        AnalyticsGoo.config(:google_analytics, :analytics_id => "UA-3536616-5", 
+                                               :domain => "demo.eyestreet.com", 
+                                               :rails_core_mixins => true, 
+                                               :environment => "production")
 
 * analytics type - Currently we only support :google_analytics
-* analytics configuration - Name, account id, and domain
-* rails_core_mixins - Defaults to false. If set to true then you get an accessor method on rails core classes for analytics_goo
-* environment - The RAILS_ENV environment that the analytics code should be called in. In all other environments it is a noop.
+
+The analytics option hash takes the following:
+
+* :analytics_id
+* :domain
+* :rails_core_mixins - Defaults to false. If set to true then you get an accessor method on rails core classes for analytics_goo
+* :environment - The RAILS_ENV environment that the analytics code should be called in. In all other environments it is a noop.
 
 Then in your models, controllers, and mailers you can do the following:
 

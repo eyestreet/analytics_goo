@@ -39,34 +39,19 @@
 
 module AnalyticsGoo
   class GoogleAnalyticsAdapter
-    attr_accessor :config, :env, :noop, :utmdt, :utmfl
+    attr_accessor :domain, :analytics_id, :env, :noop, :utmdt, :utmfl
     # utmdt
     #   Page title, which is a URL-encoded string.  utmdt=analytics%20page%20test
     # utmfl
     #   Flash version
-        # utmhn
-    # currently not stored as an accessor
-    #   Host Name, which is a URL-encoded string.   utmhn=x343.gmodules.com
-    #  def utmhn
-    #       self.domain
-    #     end
 
-
-    def initialize(ac = {}, environment = nil, noop = false, utmdt = "")
-      # holds a hash of analytics accounts
-      @config = {}
-      if ac.values.first.is_a?(Hash)
-        # we have multiple configurations
-        ac.each do |k,v|
-          @config[v[:name]]=v
-        end
-      else
-        @config[ac[:name]]=ac
-      end
+    def initialize(ac)
       # sets the environment that this should be run in
-      @env = environment
-      @noop = noop
-      @utmdt = utmdt
+      @analytics_id = ac[:analytics_id]
+      @domain = ac[:domain]
+      @env = ac[:environment]
+      @noop = ac[:noop] || false
+      @utmdt = ac[:utmdt] || ""
       @utmfl = ""
     end
 
@@ -80,8 +65,14 @@ module AnalyticsGoo
     end
 
     # utmac   Account String. Appears on all requests.    utmac=UA-2202604-2
-    def utmac(name)
-      self.config[name][:analytics_id]
+    def utmac
+      self.analytics_id
+    end
+
+    # utmhn
+    #   Host Name, which is a URL-encoded string.   utmhn=x343.gmodules.com
+    def utmhn
+      self.domain
     end
 
     # utmcs
@@ -162,31 +153,19 @@ module AnalyticsGoo
       "__utma%3D#{utmcc_cookie}.#{utmcc_random}.#{utmcc_time}.#{utmcc_time}.#{utmcc_time}.10%3B%2B__utmz%3D#{utmcc_cookie}.#{utmcc_time}.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B"
     end
 
-    #domain
-    def domain(name)
-      self.config[name][:domain]
-    end
-
-
     # send a request to get the image from google
-    def track_page_view(path, name=nil)
-      res = []
+    def track_page_view(path)
+      res = ""
       unless @noop == true
-        if name.nil?
-          @config.each do |name,value|
-            res << track_it(path, name)
-          end
-        else
-          res << track_it(path, name)
-        end
+        res = track_it(path)
       end
       res
     end
 
     protected
-    def track_it(path, name)
-#       puts "/__utm.gif?utmwv=#{self.utmwv}&utmn=#{self.utmn}&utmhn=#{self.domain(name)}&utmcs=#{self.utmcs}&utmsr=#{self.utmsr}&utmsc=#{self.utmsc}&utmul=#{self.utmul}&utmje=#{self.utmje}&utmfl=#{URI::escape(self.utmfl)}&utmdt=#{URI::escape(self.utmdt)}&utmhid=#{utmhid}&utmr=#{self.utmr}&utmp=#{path}&utmac=#{self.utmac(name)}&utmcc=#{self.utmcc} \n"
-      Net::HTTP.get_response(GA_DOMAIN,"/__utm.gif?utmwv=#{self.utmwv}&utmn=#{self.utmn}&utmhn=#{self.domain(name)}&utmcs=#{self.utmcs}&utmsr=#{self.utmsr}&utmsc=#{self.utmsc}&utmul=#{self.utmul}&utmje=#{self.utmje}&utmfl=#{URI::escape(self.utmfl)}&utmdt=#{URI::escape(self.utmdt)}&utmhid=#{utmhid}&utmr=#{self.utmr}&utmp=#{path}&utmac=#{self.utmac(name)}&utmcc=#{self.utmcc}")
+    def track_it(path)
+#       puts "/__utm.gif?utmwv=#{self.utmwv}&utmn=#{self.utmn}&utmhn=#{self.utmhn}&utmcs=#{self.utmcs}&utmsr=#{self.utmsr}&utmsc=#{self.utmsc}&utmul=#{self.utmul}&utmje=#{self.utmje}&utmfl=#{URI::escape(self.utmfl)}&utmdt=#{URI::escape(self.utmdt)}&utmhid=#{utmhid}&utmr=#{self.utmr}&utmp=#{path}&utmac=#{self.utmac}&utmcc=#{self.utmcc} \n"
+      Net::HTTP.get_response(GA_DOMAIN,"/__utm.gif?utmwv=#{self.utmwv}&utmn=#{self.utmn}&utmhn=#{self.utmhn}&utmcs=#{self.utmcs}&utmsr=#{self.utmsr}&utmsc=#{self.utmsc}&utmul=#{self.utmul}&utmje=#{self.utmje}&utmfl=#{URI::escape(self.utmfl)}&utmdt=#{URI::escape(self.utmdt)}&utmhid=#{utmhid}&utmr=#{self.utmr}&utmp=#{path}&utmac=#{self.utmac}&utmcc=#{self.utmcc}")
     end
 
     def utmcc_cookie
