@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Rob Christie"]
-  s.date = %q{2009-06-02}
+  s.date = %q{2009-06-06}
   s.email = %q{robchristie@gmail.com}
   s.extra_rdoc_files = [
     "README.markdown"
@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
   s.files = [
     ".gitignore",
      "CHANGELOG",
-     "ChangeLog",
      "MIT-LICENSE",
      "README.markdown",
      "Rakefile",
@@ -57,4 +56,3 @@ Gem::Specification.new do |s|
   else
   end
 end
-
