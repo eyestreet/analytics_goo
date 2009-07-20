@@ -127,4 +127,18 @@ class AnalyticsGooTest < ActiveSupport::TestCase
       end
     end
   end
+  context "An analytics tracking event using the adapter class" do
+    setup do
+      test = AnalyticsGoo::GoogleAnalyticsAdapter.new(:analytics_id => "UA-3536616-5",:domain => "demo.mobilediscovery.com")
+      @ga4 = AnalyticsGoo::AnalyticsAdapter.new(test)
+    end
+    context "makes a request for an image on the google analytics server" do
+      setup do
+        @resp = @ga4.track_page_view("/testFoo/myPage.html")
+      end
+      should "be a valid response" do
+        assert @resp.is_a?(Net::HTTPOK)
+      end
+    end
+  end
 end

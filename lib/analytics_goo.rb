@@ -10,6 +10,20 @@ module AnalyticsGoo
   end
 
 
+  class AnalyticsAdapter
+    def initialize(adapter)
+      @adapter = adapter
+    end
+
+    def track_page_view(path)
+      @adapter.track_page_view(path)
+    end
+
+    def env
+      @adapter.env
+    end
+  end
+
   # Factory for returning the appropriate analytics object. The <tt>type</tt> is
   # a symbol that defines the type of analytics tracker you want to create. Currently,
   # the only acceptable value is :google_analytics. The <tt>analytics</tt> hash holds
@@ -29,11 +43,11 @@ module AnalyticsGoo
         for framework in ([ :active_record, :action_controller, :action_mailer ])
           framework.to_s.camelize.constantize.const_get("Base").send :include, AnalyticsGoo::InstanceMethods
         end
-        silence_warnings { Object.const_set "ANALYTICS_TRACKER", tracker }
+        silence_warnings { Object.const_set "ANALYTICS_TRACKER", AnalyticsGoo::AnalyticsAdapter.new(tracker) }
       else
         tracker = adapter.constantize.new(analytics)
       end
-      tracker
+      AnalyticsGoo::AnalyticsAdapter.new(tracker)
     rescue StandardError
       raise AnalyticsAdapterNotFound
     end
