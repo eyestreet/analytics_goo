@@ -1,3 +1,4 @@
+
 # AnalyticsGoo
 # The following came from :
 #  http://code.google.com/apis/analytics/docs/tracking/gaTrackingTroubleshooting.html
@@ -39,11 +40,9 @@
 
 module AnalyticsGoo
   class GoogleAnalyticsAdapter
-    attr_accessor :domain, :analytics_id, :env, :noop, :utmdt, :utmfl
+    attr_accessor :domain, :analytics_id, :env, :noop, :page_title, :remote_address, :referrer, :user_agent, :http_accept_language
     # utmdt
     #   Page title, which is a URL-encoded string.  utmdt=analytics%20page%20test
-    # utmfl
-    #   Flash version
 
     def initialize(ac)
       # sets the environment that this should be run in
@@ -51,12 +50,14 @@ module AnalyticsGoo
       @domain = ac[:domain]
       @env = ac[:environment]
       @noop = ac[:noop] || false
-      @utmdt = ac[:utmdt] || ""
-      @utmfl = ""
+      @page_title  = ac[:page_title] || ""
+      @referrer = ac[:referrer] || "-"
+      @remote_address = ac[:remote_address]
+      @user_agent = ac[:user_agent] || ""
+      @http_accept_language = ac[:http_accept_language] || ""
     end
 
     GA_DOMAIN = "www.google-analytics.com"
-    #    GA_DOMAIN = "dev.www.mobilediscovery.com"
     GA_IMAGE = "__utm.gif"
 
     def urchin_url(ssl = false)
@@ -91,7 +92,7 @@ module AnalyticsGoo
     # utmn
     #   Unique ID generated for each GIF request to prevent caching of the GIF image.   utmn=1142651215
     def utmn
-      ActiveSupport::SecureRandom.random_number(9999999999)
+      ActiveSupport::SecureRandom.random_number(9999999999).to_s
     end
 
     # utmsc
@@ -115,7 +116,7 @@ module AnalyticsGoo
     # utmwv
     #   Tracking code version   utmwv=1
     def utmwv
-      "4.3"
+      "4.4sj"
     end
 
     # utmp
@@ -127,7 +128,17 @@ module AnalyticsGoo
     # utmr
     #   Referral, complete URL.   utmr=http://www.example.com/aboutUs/index.php?var=selected
     def utmr
-      "-"
+      self.referrer
+    end
+
+    # utmip
+    # Remote IP address
+    def utmip
+      return '' if self.remote_address.blank?
+      # Capture the first three octects of the IP address and replace the forth
+      # with 0, e.g. 124.455.3.123 becomes 124.455.3.0
+      ip = self.remote_address.to_s.gsub!(/([^.]+\.[^.]+\.[^.]+\.)[^.]+/,"\\1") + "0"
+      ip
     end
 
 
@@ -150,7 +161,11 @@ module AnalyticsGoo
     #   Cookie values. This request parameter sends all the cookies requested from the page.
     #   utmcc=__utma%3D117243.1695285.22%3B%2B __utmz%3D117945243.1202416366.21.10. utmcsr%3Db%7C utmccn%3D(referral)%7C utmcmd%3Dreferral%7C utmcct%3D%252Fissue%3B%2B
     def utmcc
-      "__utma%3D#{utmcc_cookie}.#{utmcc_random}.#{utmcc_time}.#{utmcc_time}.#{utmcc_time}.10%3B%2B__utmz%3D#{utmcc_cookie}.#{utmcc_time}.1.1.utmcsr%3D(direct)%7Cutmccn%3D(direct)%7Cutmcmd%3D(none)%3B"
+      "__utma%3D999.999.999.999.999.1%3B"
+    end
+
+    def utmdt
+      self.page_title
     end
 
     # send a request to get the image from google
@@ -165,7 +180,19 @@ module AnalyticsGoo
     protected
     def track_it(path)
 #       puts "/__utm.gif?utmwv=#{self.utmwv}&utmn=#{self.utmn}&utmhn=#{self.utmhn}&utmcs=#{self.utmcs}&utmsr=#{self.utmsr}&utmsc=#{self.utmsc}&utmul=#{self.utmul}&utmje=#{self.utmje}&utmfl=#{URI::escape(self.utmfl)}&utmdt=#{URI::escape(self.utmdt)}&utmhid=#{utmhid}&utmr=#{self.utmr}&utmp=#{path}&utmac=#{self.utmac}&utmcc=#{self.utmcc} \n"
-      Net::HTTP.get_response(GA_DOMAIN,"/__utm.gif?utmwv=#{self.utmwv}&utmn=#{self.utmn}&utmhn=#{self.utmhn}&utmcs=#{self.utmcs}&utmsr=#{self.utmsr}&utmsc=#{self.utmsc}&utmul=#{self.utmul}&utmje=#{self.utmje}&utmfl=#{URI::escape(self.utmfl)}&utmdt=#{URI::escape(self.utmdt)}&utmhid=#{utmhid}&utmr=#{self.utmr}&utmp=#{path}&utmac=#{self.utmac}&utmcc=#{self.utmcc}")
+      utm_uri = "/__utm.gif?" +
+                "utmwv="  + self.utmwv +
+                "&utmn="  + self.utmn +
+                "&utmhn=" + CGI.escape(self.utmhn) +
+                "&utmr="  + CGI.escape(self.utmr) +
+                "&utmp="  + CGI.escape(path) +
+                "&utmac=" + self.utmac +
+                "&utmcc=" + self.utmcc +
+                "&utmvid="+ self.utmvid +
+                "&utmip=" + self.utmip
+      Net::HTTP.start(GA_DOMAIN) {|http|
+        http.request_get(utm_uri, {"User-Agent" => self.user_agent, "Accept-Language" => self.http_accept_language})
+      }
     end
 
     def utmcc_cookie
@@ -180,8 +207,8 @@ module AnalyticsGoo
       Time.new.to_i
     end
 
-    def utmhid
-      ActiveSupport::SecureRandom.random_number(999999999)
+    def utmvid
+      "0x" + ActiveSupport::SecureRandom.hex[0,16]
     end
   end
 end
