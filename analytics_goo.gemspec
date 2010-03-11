@@ -40,7 +40,7 @@ Gem::Specification.new do |s|
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.1}
-  s.summary = %q{TODO}
+  s.summary = %q{analytics_goo provides a ruby wrapper for performing Google Analytics tracking server side using their Mobile API.}
   s.test_files = [
     "test/analytics_goo_test.rb",
      "test/test_helper.rb"
