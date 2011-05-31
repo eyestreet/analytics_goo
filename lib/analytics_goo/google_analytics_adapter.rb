@@ -189,7 +189,8 @@ module AnalyticsGoo
                 "&utmac=" + self.utmac +
                 "&utmcc=" + self.utmcc +
                 "&utmvid="+ self.utmvid +
-                "&utmip=" + self.utmip
+                "&utmip=" + self.utmip +
+                "&utmdt=" + CGI.escape(self.utmdt)
       Net::HTTP.start(GA_DOMAIN) {|http|
         http.request_get(utm_uri, {"User-Agent" => self.user_agent, "Accept-Language" => self.http_accept_language})
       }
