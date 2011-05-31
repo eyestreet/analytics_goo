@@ -2,11 +2,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{analytics_goo}
-  s.version = "0.1.2"
+  s.version = "0.1.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Rob Christie"]
-  s.date = %q{2010-03-08}
+  s.date = %q{2011-05-31}
   s.email = %q{robchristie@gmail.com}
   s.extra_rdoc_files = [
     "README.markdown"
@@ -35,12 +35,11 @@ Gem::Specification.new do |s|
      "test/analytics_goo_test.rb",
      "test/test_helper.rb"
   ]
-  s.has_rdoc = true
   s.homepage = %q{http://github.com/eyestreet/analytics_goo}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.3.1}
-  s.summary = %q{analytics_goo provides a ruby wrapper for performing Google Analytics tracking server side using their Mobile API.}
+  s.rubygems_version = %q{1.3.6}
+  s.summary = %q{TODO}
   s.test_files = [
     "test/analytics_goo_test.rb",
      "test/test_helper.rb"
@@ -48,7 +47,7 @@ Gem::Specification.new do |s|
 
   if s.respond_to? :specification_version then
     current_version = Gem::Specification::CURRENT_SPECIFICATION_VERSION
-    s.specification_version = 2
+    s.specification_version = 3
 
     if Gem::Version.new(Gem::RubyGemsVersion) >= Gem::Version.new('1.2.0') then
     else
