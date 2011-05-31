@@ -6,7 +6,7 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "analytics_goo"
-    gem.summary = %Q{TODO}
+    gem.summary = %Q{AnalyticsGoo provides server side non-javascript tracking using google analytics.}
     gem.email = "robchristie@gmail.com"
     gem.homepage = "http://github.com/eyestreet/analytics_goo"
     gem.files.include "rails/**/*"
