@@ -47,6 +47,12 @@ class AnalyticsGooTest < ActiveSupport::TestCase
         assert_equal "test.local", @ga.domain
       end
     end
+    context "when initialized with a remote ip address" do
+      should "return that IP" do
+        assert_equal "127.0.0.1", @ga.utmip
+      end
+    end
+
     context "that has been initialized" do
       should "have an urchin url" do
         assert_equal "http://www.google-analytics.com/__utm.gif", @ga.urchin_url
@@ -137,7 +143,7 @@ class AnalyticsGooTest < ActiveSupport::TestCase
     end
     context "makes a request for an image on the google analytics server" do
       setup do
-        path = "/__utm.gif?utmwv=4.4sj&utmn=1277734430&utmhn=shor.tswit.ch&utmr=-&utmp=%2Fadmin%2F1&utmac=MO-11685745-3&utmcc=__utma%3D999.999.999.999.999.1%3B&utmvid=0x5719fb3b1e05e909&utmip=127.0.0.0"
+        path = "/__utm.gif?utmwv=4.4sj&utmn=1277734430&utmhn=shor.tswit.ch&utmr=-&utmp=%2Fadmin%2F1&utmac=MO-11685745-3&utmcc=__utma%3D999.999.999.999.999.1%3B&utmvid=0x5719fb3b1e05e909&utmip=127.0.0.1"
         header_hash =  {'User-Agent' => 'Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6', 'Accept-Language' => 'en-us,en;q=0.5'}
         @test_ad.expects(:utmn).returns("1277734430")
         @test_ad.expects(:utmvid).returns("0x5719fb3b1e05e909")
