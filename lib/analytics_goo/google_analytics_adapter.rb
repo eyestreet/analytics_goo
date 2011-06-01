@@ -40,9 +40,10 @@
 
 module AnalyticsGoo
   class GoogleAnalyticsAdapter
-    attr_accessor :domain, :analytics_id, :env, :noop, :page_title, :remote_address, :referrer, :user_agent, :http_accept_language
-    # utmdt
-    #   Page title, which is a URL-encoded string.  utmdt=analytics%20page%20test
+    attr_accessor :domain, :analytics_id, :env, :noop, :page_title, :remote_address,
+                  :referrer, :user_agent, :http_accept_language, :campaign, :source,
+                  :medium, :term, :content
+
 
     def initialize(ac)
       # sets the environment that this should be run in
@@ -55,6 +56,11 @@ module AnalyticsGoo
       @remote_address = ac[:remote_address]
       @user_agent = ac[:user_agent] || ""
       @http_accept_language = ac[:http_accept_language] || ""
+      @campaign =  ac[:campaign] || ""
+      @source = ac[:source] || ""
+      @medium = ac[:medium] || ""
+      @term = ac[:term] || ""
+      @content = ac[:content] || ""
     end
 
     GA_DOMAIN = "www.google-analytics.com"
@@ -164,6 +170,27 @@ module AnalyticsGoo
       self.page_title
     end
 
+    def utm_campaign
+      self.campaign
+    end
+
+    def utm_source
+      self.source
+    end
+
+
+    def utm_medium
+      self.medium
+    end
+
+    def utm_term
+      self.term
+    end
+
+    def utm_content
+      self.content
+    end
+
     # send a request to get the image from google
     def track_page_view(path)
       res = ""
@@ -175,7 +202,7 @@ module AnalyticsGoo
 
     protected
     def track_it(path)
-#       puts "/__utm.gif?utmwv=#{self.utmwv}&utmn=#{self.utmn}&utmhn=#{self.utmhn}&utmcs=#{self.utmcs}&utmsr=#{self.utmsr}&utmsc=#{self.utmsc}&utmul=#{self.utmul}&utmje=#{self.utmje}&utmfl=#{URI::escape(self.utmfl)}&utmdt=#{URI::escape(self.utmdt)}&utmhid=#{utmhid}&utmr=#{self.utmr}&utmp=#{path}&utmac=#{self.utmac}&utmcc=#{self.utmcc} \n"
+      #TODO - cleanup
       utm_uri = "/__utm.gif?" +
                 "utmwv="  + self.utmwv +
                 "&utmn="  + self.utmn +
@@ -185,8 +212,12 @@ module AnalyticsGoo
                 "&utmac=" + self.utmac +
                 "&utmcc=" + self.utmcc +
                 "&utmvid="+ self.utmvid +
-                "&utmip=" + self.utmip +
-                "&utmdt=" + CGI.escape(self.utmdt)
+                "&utmip=" + self.utmip
+      utm_uri << "&utmdt=#{CGI.escape(self.utmdt)}"               unless self.utmdt.blank?
+      utm_uri << "&utm_campaign=#{CGI.escape(self.utm_campaign)}" unless self.utm_campaign.blank?
+      utm_uri << "&utm_source=#{CGI.escape(self.utm_source)}"     unless self.utm_source.blank?
+      utm_uri << "&utm_medium=#{CGI.escape(self.utm_medium)}"     unless self.utm_medium.blank?
+      utm_uri << "&utm_term=#{CGI.escape(self.utm_term)}"         unless self.utm_term.blank?
       Net::HTTP.start(GA_DOMAIN) {|http|
         http.request_get(utm_uri, {"User-Agent" => self.user_agent, "Accept-Language" => self.http_accept_language})
       }

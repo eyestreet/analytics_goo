@@ -34,7 +34,7 @@ class AnalyticsGooTest < ActiveSupport::TestCase
 
   context "AnalyticsGoo " do
     setup do
-      @analytics_config = { :analytics_id => "MO-11685745-3",:domain => "test.local", :page_title => "This is the page title"}
+      @analytics_config = { :analytics_id => "MO-11685745-3",:domain => "test.local", :page_title => "This is the page title",  :remote_address => "127.0.0.1"}
       @ga = AnalyticsGoo::GoogleAnalyticsAdapter.new(@analytics_config)
     end
     context "when initialized with an analytics id" do
