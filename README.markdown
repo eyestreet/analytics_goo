@@ -10,9 +10,9 @@ gem install eyestreet-analytics_goo
 ## Newer usage pattern
    Initially I made an adapter pattern thinking that we would support multiple analytics packages. So far I only need Google Analytics:
 
-      tracker =  AnalyticsGoo::GoogleAnalyticsAdapter.new(:analytics_id => "MO-11685745-3",
+      tracker =  AnalyticsGoo::GoogleAnalyticsAdapter.new(:analytics_id => "MO-11685745-5",
                                                       :domain => "shor.tswit.ch",
-                                                      :remote_address => "75.103.6.17",
+                                                      :remote_address => "76.25.141.74",
                                                       :user_agent => "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.6; en-US; rv:1.9.2) Gecko/20100115 Firefox/3.6",
                                                       :http_accept_language => "en-us,en;q=0.5")
       tracker.track_page_view("/testFoo/myPage.html")
@@ -24,7 +24,7 @@ gem install eyestreet-analytics_goo
    The simple usage is the following:
    
         tracker = AnalyticsGoo.config(:google_analytics, 
-                                      :analytics_id => "MO-11685745-3", 
+                                      :analytics_id => "MO-11685745-5", 
                                       :domain => "demo.eyestreet.com")
 
         tracker.track_page_view("/foo")
