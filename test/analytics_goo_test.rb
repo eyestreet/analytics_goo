@@ -51,6 +51,9 @@ class AnalyticsGooTest < ActiveSupport::TestCase
       should "return that IP" do
         assert_equal "127.0.0.0", @ga.utmip
       end
+      should "not change the analytics_config hash" do
+        assert_equal "127.0.0.1", @analytics_config[:remote_address]
+      end
     end
 
     context "that has been initialized" do
