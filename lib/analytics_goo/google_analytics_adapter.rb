@@ -140,7 +140,11 @@ module AnalyticsGoo
     # utmip
     # Remote IP address
     def utmip
-      self.remote_address
+      return '' if self.remote_address.blank?
+      # Capture the first three octects of the IP address and replace the forth
+      # with 0, e.g. 124.455.3.123 becomes 124.455.3.0
+      ip = self.remote_address.to_s.gsub!(/([^.]+\.[^.]+\.[^.]+\.)[^.]+/,"\\1") + "0"
+      ip
     end
 
 
