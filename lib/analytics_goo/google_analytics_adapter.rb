@@ -38,12 +38,36 @@
 # utmttx
 #   Tax. Values as for unit and price.  utmttx=29.16
 
+# utmcs
+#  Language encoding for the browser. Some browsers dont set this, in which case it is set to "-"
+#  utmcs=ISO-8859-1
+# utmje
+#  Indicates if browser is Java-enabled. 1 is true. 	utmje=1
+# utmsc
+#  Screen color depth 	utmsc=24-bit
+# utmsr
+#  Screen resolution 	utmsr=2400x1920&
+# utmul
+#  Browser language. 	utmul=pt-br
+# utmwv
+#  Tracking code version 	utmwv=1
+# utmcn
+#  Starts a new campaign session. Either utmcn or utmcr is present on any given request. Changes the campaign tracking data; but does not start a new session
+#  utmcn=1
+# utmcr
+#  Indicates a repeat campaign visit. This is set when any subsequent clicks occur on the same link. Either utmcn or utmcr is present on any given request.
+#  utmcr=1
+# utmcc
+#	 Cookie values. This request parameter sends all the cookies requested from the page.
+
 module AnalyticsGoo
   class GoogleAnalyticsAdapter
     attr_accessor :domain, :analytics_id, :env, :noop, :page_title, :remote_address,
                   :referrer, :user_agent, :http_accept_language, :campaign, :source,
-                  :medium, :term, :content
-
+                  :medium, :term, :content, :language_encoding, :java_enabled,
+                  :screen_color_depth, :screen_resolution, :browser_language,
+                  :tracking_code_version, :new_campaign_session, :repeat_campaign_visit,
+                  :cookie_values
 
     def initialize(ac)
       # sets the environment that this should be run in
@@ -51,23 +75,32 @@ module AnalyticsGoo
       @domain = ac[:domain]
       @env = ac[:environment]
       @noop = ac[:noop] || false
-      @page_title  = ac[:page_title] || ""
-      @referrer = ac[:referrer] || "-"
+      @page_title  = ac[:page_title] || ''
+      @referrer = ac[:referrer] || '-'
       @remote_address = ac[:remote_address]
-      @user_agent = ac[:user_agent] || ""
-      @http_accept_language = ac[:http_accept_language] || ""
-      @campaign =  ac[:campaign] || ""
-      @source = ac[:source] || ""
-      @medium = ac[:medium] || ""
-      @term = ac[:term] || ""
-      @content = ac[:content] || ""
+      @user_agent = ac[:user_agent] || ''
+      @http_accept_language = ac[:http_accept_language] || ''
+      @campaign =  ac[:campaign] || ''
+      @source = ac[:source] || ''
+      @medium = ac[:medium] || ''
+      @term = ac[:term] || ''
+      @content = ac[:content] || ''
+      @language_encoding = ac[:language_encoding] || 'UTF-8'
+      @java_enabled = ac[:java_enabled] || '1'
+      @screen_color_depth = ac[:screen_color_depth] || '0-bit'
+      @screen_resolution = ac[:screen_resolution] || '0x0'
+      @browser_language = ac[:browser_language] || 'en-us'
+      @tracking_code_version = ac[:tracking_code_version] || '4.4sj'
+      @new_campaign_session = ac[:new_campaign_session] || '1'
+      @repeat_campaign_visit = ac[:repeat_campaign_visit] || '1'
+      @cookie_values = ac[:cookie_values] || '__utma%3D999.999.999.999.999.1%3B'
     end
 
-    GA_DOMAIN = "www.google-analytics.com"
-    GA_IMAGE = "__utm.gif"
+    GA_DOMAIN = 'www.google-analytics.com'
+    GA_IMAGE = '__utm.gif'
 
     def urchin_url(ssl = false)
-      protocol = (ssl == true) ? "https":"http"
+      protocol = (ssl == true) ? 'https' : 'http'
       "#{protocol}://#{GA_DOMAIN}/#{GA_IMAGE}"
     end
 
@@ -86,13 +119,13 @@ module AnalyticsGoo
     #   Language encoding for the browser. Some browsers don't set this, in which case it is set to "-"
     #   utmcs=ISO-8859-1
     def utmcs
-      "UTF-8"
+      self.language_encoding
     end
 
     # utmje
     #   Indicates if browser is Java-enabled. 1 is true.  utmje=1
     def utmje
-      "1"
+      self.java_enabled
     end
 
     # utmn
@@ -104,25 +137,25 @@ module AnalyticsGoo
     # utmsc
     #   Screen color depth  utmsc=24-bit
     def utmsc
-      "0-bit"
+      self.screen_color_depth
     end
 
     # utmsr
     #   Screen resolution   utmsr=2400x1920&
     def utmsr
-      "0x0"
+      self.screen_resolution
     end
 
     # utmul
     #   Browser language.   utmul=pt-br
     def utmul
-      "en-us"
+      self.browser_language
     end
 
     # utmwv
     #   Tracking code version   utmwv=1
     def utmwv
-      "4.4sj"
+      self.tracking_code_version
     end
 
     # utmp
@@ -152,21 +185,21 @@ module AnalyticsGoo
     # utmcn   Starts a new campaign session. Either utmcn or utmcr is present on any given request. Changes the campaign tracking data; but does not start a new session
     #   utmcn=1
     def utmcn
-      "1"
+      self.new_campaign_session
     end
 
     # utmcr
     #   Indicates a repeat campaign visit. This is set when any subsequent clicks occur on the same link. Either utmcn or utmcr is present on any given request.
     #   utmcr=1
     def utmcr
-      "1"
+      self.repeat_campaign_visit
     end
 
     # utmcc
     #   Cookie values. This request parameter sends all the cookies requested from the page.
     #   utmcc=__utma%3D117243.1695285.22%3B%2B __utmz%3D117945243.1202416366.21.10. utmcsr%3Db%7C utmccn%3D(referral)%7C utmcmd%3Dreferral%7C utmcct%3D%252Fissue%3B%2B
     def utmcc
-      "__utma%3D999.999.999.999.999.1%3B"
+      self.cookie_values
     end
 
     def utmdt
